@@ -1,0 +1,8 @@
+batch,customer_id,full_name,city,tier,updated_ts
+1,C001,Aisha Rahman,Dubai,silver,2026-10-01 00:00:00
+1,C002,Rohan Mehta,Abu Dhabi,bronze,2026-10-01 00:00:00
+1,C003,Fatima Al Zaabi,Sharjah,gold,2026-10-01 00:00:00
+2,C001,Aisha Rahman,Dubai,silver,2026-10-01 00:00:00
+2,C002,Rohan Mehta,Dubai,bronze,2026-10-10 08:00:00
+2,C003,Fatima Al Zaabi,Sharjah,platinum,2026-10-12 14:30:00
+2,C006,Omar Haddad,Ajman,bronze,2026-10-12 15:00:00

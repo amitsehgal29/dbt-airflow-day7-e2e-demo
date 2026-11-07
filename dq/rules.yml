@@ -1,0 +1,43 @@
+# Data-quality rules checked by dq/check.py.
+# severity: error -> the gate fails and everything downstream is skipped
+# severity: warn  -> logged in the task output and report, but the pipeline carries on
+raw:
+  - name: raw_orders_not_empty
+    sql: select count(*) from raw_orders
+    expect: ">= 1"
+    severity: error
+  - name: raw_orders_no_duplicate_ids
+    sql: select count(*) - count(distinct order_id) from raw_orders
+    expect: "== 0"
+    severity: error
+  - name: raw_orders_required_fields_present
+    sql: >
+      select count(*) from raw_orders
+      where order_id is null or customer_id is null or order_ts is null or amount_aed is null
+    expect: "== 0"
+    severity: error
+  - name: raw_orders_amount_is_numeric
+    sql: select count(*) from raw_orders where try_cast(amount_aed as decimal(12,2)) is null
+    expect: "== 0"
+    severity: error
+
+marts:
+  - name: fct_orders_row_count_in_range
+    sql: select count(*) from fct_orders
+    expect: "between 5 50"
+    severity: error
+  - name: fct_orders_net_revenue_positive
+    sql: select coalesce(sum(amount_aed), 0) from fct_orders
+    expect: "> 0"
+    severity: error
+  - name: fct_orders_pending_share_below_30pct
+    sql: select 100.0 * count(*) filter (where order_status = 'pending') / count(*) from fct_orders
+    expect: "< 30"
+    severity: warn
+  - name: snapshot_one_current_row_per_customer
+    sql: >
+      select count(*) from (
+        select customer_id from snap_customers where dbt_valid_to is null
+        group by 1 having count(*) > 1)
+    expect: "== 0"
+    severity: error

@@ -1,0 +1,7 @@
+# Install separately; Airflow requires its matching constraints URL (see README).
+apache-airflow==3.1.2
+# dbt and quality checks belong in .dbtvenv, not .afvenv.
+dbt-core==1.12.6
+dbt-duckdb==1.11.1
+duckdb==2.0.0
+pyyaml==6.0.3

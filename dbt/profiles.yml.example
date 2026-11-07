@@ -1,0 +1,8 @@
+# Copy to profiles.yml in this folder (or ~/.dbt/profiles.yml).
+shop_analytics:
+  target: dev
+  outputs:
+    dev:
+      type: duckdb
+      path: shop.duckdb
+      threads: 2

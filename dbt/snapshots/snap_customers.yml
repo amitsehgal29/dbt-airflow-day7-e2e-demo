@@ -1,0 +1,8 @@
+snapshots:
+  - name: snap_customers
+    relation: ref('stg_customer_profiles')
+    description: SCD Type 2 history of customer profiles (timestamp strategy).
+    config:
+      unique_key: customer_id
+      strategy: timestamp
+      updated_at: updated_at

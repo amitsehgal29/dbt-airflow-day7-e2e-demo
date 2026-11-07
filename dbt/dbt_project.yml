@@ -1,0 +1,45 @@
+name: shop_analytics
+version: "1.0.0"
+config-version: 2
+profile: shop_analytics
+
+model-paths: ["models"]
+snapshot-paths: ["snapshots"]
+seed-paths: ["seeds"]
+target-path: "target"
+clean-targets: ["target", "dbt_packages"]
+
+seeds:
+  shop_analytics:
+    raw_orders:
+      +column_types:
+        order_id: varchar
+        customer_id: varchar
+        order_ts: varchar
+        status: varchar
+        amount_aed: varchar
+        payment_method: varchar
+    raw_customers:
+      +column_types:
+        customer_id: varchar
+        full_name: varchar
+        city: varchar
+        signup_date: varchar
+    raw_order_updates:
+      +column_types:
+        order_id: varchar
+        amount_aed: varchar
+    raw_customer_profiles:
+      +column_types:
+        batch: integer
+
+models:
+  shop_analytics:
+    staging:
+      +materialized: view
+    marts:
+      +materialized: table
+
+vars:
+  # 1 = initial load, 2 = later load with changed / new records
+  batch: 1

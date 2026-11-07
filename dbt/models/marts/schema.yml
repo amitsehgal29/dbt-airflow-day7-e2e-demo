@@ -1,0 +1,9 @@
+version: 2
+models:
+  - name: fct_orders
+    description: Incremental order fact table (one row per order, latest version).
+    columns:
+      - name: order_id
+        data_tests: [not_null, unique]
+      - name: updated_at
+        data_tests: [not_null]

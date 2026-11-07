@@ -1,0 +1,53 @@
+version: 2
+
+models:
+  - name: stg_customers
+    description: One row per customer, cleaned from the raw customers seed.
+    columns:
+      - name: customer_id
+        description: Customer key, like C001.
+        data_tests: [not_null, unique]
+      - name: full_name
+        description: Customer name with surrounding spaces trimmed.
+        data_tests: [not_null]
+      - name: city
+        description: City in the UAE.
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ["Dubai", "Abu Dhabi", "Sharjah"]
+      - name: signup_date
+        description: Date the customer signed up.
+
+  - name: stg_orders
+    description: One row per order, with clean types and standardised text fields.
+    columns:
+      - name: order_id
+        description: Order key.
+        data_tests: [not_null, unique]
+      - name: customer_id
+        description: The customer who placed the order.
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_customers')
+                field: customer_id
+      - name: ordered_at
+        description: When the order was placed.
+      - name: order_date
+        description: Date part of ordered_at, handy for daily rollups.
+      - name: order_status
+        description: '{{ doc("order_status") }}'
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ["pending", "shipped", "completed", "cancelled", "returned"]
+      - name: amount_aed
+        description: Order amount in AED. Zero for cancelled, negative for returned.
+      - name: payment_method
+        description: card, cash or apple_pay.
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ["card", "cash", "apple_pay"]
